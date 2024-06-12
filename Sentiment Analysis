@@ -1,0 +1,37 @@
+import re
+from textblob import TextBlob
+from nltk.tokenize import word_tokenize
+import nltk
+
+nltk.download('punkt')
+
+def clean_text(input_text):
+    cleaned_text = input_text.lower()
+    cleaned_text = re.sub(r'[^\w\s]', '', cleaned_text)
+    tokenized_words = word_tokenize(cleaned_text)
+    return ' '.join(tokenized_words)
+
+def get_sentiment(processed_text):
+    text_blob = TextBlob(processed_text)
+    if text_blob.sentiment.polarity > 0:
+        return 'Positive'
+    elif text_blob.sentiment.polarity < 0:
+        return 'Negative'
+    else:
+        return 'Neutral'
+
+def sentiment_tool(user_text):
+    processed_text = clean_text(user_text)
+    sentiment_result = get_sentiment(processed_text)
+    return sentiment_result
+
+# Testing the tool with different sentences
+sample_sentences = [
+    "I absolutely adore this product!",
+    "This is the most terrible experience I've had.",
+    "The performance was quite average."
+]
+
+for sentence in sample_sentences:
+    print(f"Sentence: {sentence}")
+    print(f"Sentiment: {sentiment_tool(sentence)}\n")
